@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mentor Academy</title>
+    <meta name="description" content="MENTOR ACADEMY">
+    <meta name="keywords" content="A website for keeping track of student resources">
+
+    <link rel="stylesheet" type="text/css"
+          href="https://fonts.googleapis.com/css?family=Open+Sans|Candal|Alegreya+Sans">
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/imagehover.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+</head>
+
+<body>
+<!--Navigation bar-->
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/htmls/index.html">Men<span>tor</span></a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="btn-trial"><a href="/htmls/allStudents.html">All Students</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!--/ Navigation bar-->
+<br><br><br><br><br>
+<div class="container">
+    <form class="studentForm" action="/students/add" enctype="multipart/form-data" method="post">
+        <div class="form-group">
+            <label>Enter fullname</label>
+            <input type="text" placeholder="Fullname" class="form-control" name="fullname" id="fullname" required>
+        </div>
+
+        <div class="form-group">
+            <label>Email:</label>
+            <input type="email" placeholder="Email" class="form-control" name="email" id="email" required>
+        </div>
+
+        <div class="form-group">
+            <label>Age:</label>
+            <input type="number" placeholder="Age" class="form-control" name="age" id="age" required>
+        </div>
+
+        <div class="form-group">
+            <label>Faculty:</label>
+            <input type="text" placeholder="Faculty" class="form-control" name="faculty" id="faculty" required>
+        </div>
+
+        <div class="form-group">
+            <label>Department:</label>
+            <input type="text" placeholder="Department" class="form-control" name="department" id="department" required>
+        </div>
+
+        <div class="form-group">
+            <label>Level:</label>
+            <input type="number" placeholder="Level" class="form-control" name="level" id="level" required>
+        </div>
+
+        <div class="form-group">
+            <label>Upload Student Picture:</label>
+            <input type="file" name="profileImage" required>
+        </div>
+        <input type="submit" class="btn btn-success" value="Register">
+    </form>
+</div>
+<!--<script src="/js/jquery.min.js"></script>-->
+<!--<script src="/js/bootstrap.min.js"></script>-->
+<!--<script src="/js/jquery.form.min.js"></script>-->
+<script>
+    $(document).ready(function() {
+        $('.studentForm').submit(function (e) {
+            e.preventDefault();
+            var fullname = $('#fullname').val();
+            var email = $('#email').val();
+            var age = $('#age').val();
+            var faculty = $('#faculty').val();
+            var department = $('#department').val();
+            var level = $('#level').val();
+            $(this).ajaxSubmit({
+                data: {
+                    fullname: fullname,
+                    email: email,
+                    age: age,
+                    faculty: faculty,
+                    department: department,
+                    level: level
+                },
+                contentType: 'application/json',
+                error: function(response) {
+                    alert('error');
+                },
+                success: function (response) {
+                    alert(response);
+                    window.location.href = '/htmls/allStudents.html';
+                }
+            });
+            return false;
+        });
+    });
+</script>
+
+</body>

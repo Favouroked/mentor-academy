@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mentor Education Bootstrap Theme</title>
+    <meta name="description" content="MENTOR ACADEMY">
+    <meta name="keywords" content="A website for keeping track of student resources">
+
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans|Candal|Alegreya+Sans">
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/imagehover.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+</head>
+
+<body>
+<!--Navigation bar-->
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/htmls/index.html">Men<span>tor</span></a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="btn-trial"><a href="/htmls/addStudent.html">Add Student</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!--/ Navigation bar-->
+<br><br><br><br><br>
+<div class="container profileDiv">
+<div class="table-responsive">
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th>Fullname</th>
+        <th>Email</th>
+        <th>Age</th>
+        <th>Faculty</th>
+        <th>Department</th>
+        <th>Level</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+
+</table></div></div>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/jquery.cookie.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function(){
+        allStudents();
+    });
+    function allStudents(){
+        var theStudents = '';
+        $.getJSON('/students/all', function(data){
+            $.each(data, function(){
+                theStudents += '<tr>';
+                theStudents += '<td>' + this.fullname + '</td>';
+                theStudents += '<td class="studentEmail">' + this.email + '</td>';
+                theStudents += '<td>' + this.age + '</td>';
+                theStudents += '<td>' + this.faculty + '</td>';
+                theStudents += '<td>' + this.department + '</td>';
+                theStudents += '<td>' + this.level + '</td>';
+                theStudents += '</tr>';
+            });
+
+            $('table tbody').html(theStudents);
+            $('tbody tr').on('mouseover', function(){
+                $(this).attr('title', "Click to view this student's profile");
+            })
+        });
+
+    }
+    function showProfile(mail){
+        var profile = '';
+        $.getJSON('/students/showStudent/'+mail, function(data){
+            console.log(data);
+            profile += '<div class="container">';
+            profile += '<div class="row"><div class="col-sm-10"><h1>' +data.fullname+ '</h1></div><div class="col-sm-2"><a href="#" class="pull-right"><img title="profile image" class="img-circle img-responsive" src="/images/'+data.profileImage+'"></a></div></div>';
+            profile += '<ul class="list-group">';
+            profile += '<li class="list-group-item text-muted">Profile</li>';
+            profile += '<li class="list-group-item text-right"><span class="pull-left"><strong>Email</strong></span><span class="the-email">'+ data.email+'</span></li>';
+            profile += '<li class="list-group-item text-right"><span class="pull-left"><strong>Faculty</strong></span>'+ data.faculty+'</li>';
+            profile += '<li class="list-group-item text-right"><span class="pull-left"><strong>Department</strong></span>'+ data.department+'</li>';
+            profile += '<li class="list-group-item text-right"><span class="pull-left"><strong>Level</strong></span>'+ data.level+'</li></ul>';
+            profile += '<button class="reload btn btn-default">Back to All Students</button>';
+            profile += '<button class="delete btn btn-danger">Delete Student</button>';
+            profile += '<a href="/htmls/updateStudent.html" class="update text-right">Update</a>';
+            console.log(profile);
+            $('.profileDiv').html(profile);
+        });
+        console.log(profile);
+    }
+
+    function deleteStudent(email){
+        $.ajax({
+            type: 'GET',
+            url: '/students/showStudent/'+email+'/delete',
+            success: function(response){
+                alert(response);
+                location.reload();
+            }
+        });
+    }
+
+    $(document).on('click', 'tbody tr', function(){
+        var email = $(this).find('.studentEmail').html();
+        showProfile(email);
+
+    });
+    $(document).on('click', '.reload', function(){
+        location.reload();
+    });
+    $(document).on('click', '.delete', function(){
+        var wanna_delete = $('.list-group').find('.the-email').html();
+        deleteStudent(wanna_delete);
+    });
+    $(document).on('click', '.update', function(){
+        var the_email = $('.list-group').find('.the-email').html();
+        $.cookie('email', the_email, { expires: 7, path: '/' });
+        return true;
+    });
+</script>
+</body>
