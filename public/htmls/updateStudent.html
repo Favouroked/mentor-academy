@@ -98,7 +98,7 @@
     $(document).ready(function() {
         var cookieValue = $.cookie('email');
         $.removeCookie('email');
-        $.getJSON('http://localhost:3000/students/showStudent/'+cookieValue, function(data){
+        $.getJSON('/students/showStudent/'+cookieValue, function(data){
             $('#level').val(data.level);
             $('#email').val(data.email);
             $('#department').val(data.department);
