@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var multer = require('multer');
+var fs = require('fs');
 var Student = require('../models/student');
 
 var storage = multer.diskStorage({
@@ -16,12 +17,12 @@ var storage = multer.diskStorage({
 var upload = multer({storage: storage}).single('profileImage');
 
 router.post('/add', upload, function (req, res) {
-    var fullname = req.body.fullname;
-    var email = req.body.email;
-    var age = req.body.age;
-    var faculty = req.body.faculty;
-    var department = req.body.department;
-    var level = req.body.level;
+    var fullname = req.body.fullname[0];
+    var email = req.body.email[0];
+    var age = req.body.age[0];
+    var faculty = req.body.faculty[0];
+    var department = req.body.department[0];
+    var level = req.body.level[0];
     console.log(fullname);
     console.log(email);
     var profileimage;
@@ -48,6 +49,8 @@ router.post('/add', upload, function (req, res) {
     newStudent.save(function (err, student) {
         if (err) {
             res.status(500).send(err);
+        } else {
+            res.send("Student added");
         }
     });
 });
@@ -69,62 +72,59 @@ router.get('/all', function (req, res) {
 
 
 router.post('/showStudent/:email/update', upload, function (req, res) {
-    var email = req.params.email;
+    var dir = __dirname;
+    var dirname = dir.replace('routes', 'public');
+    var reqemail = req.params.email;
+    var fullname = req.body.fullname[0];
+    var email = req.body.email[0];
+    var faculty = req.body.faculty[0];
+    var department = req.body.department[0];
+    var level = req.body.level[0];
+    var age = req.body.age[0];
     var profileimage;
-    Student.getStudentByEmail(email, function (err, student) {
+    var oldProfileImage;
+    Student.getStudentByEmail(reqemail, function (err, student) {
         if (err) {
             res.status(500).send(err);
-        } else {
-            if (req.file) {
-                profileimage = req.file.filename;
-                upload(req, res, function (err) {
-                    if (err) {
-                        req.flash("An error occured while uploading");
-                        // res.redirect('/students/add');
-                    }
-                    console.log("Image uploaded");
-                });
-                student.fullname = req.body.fullname || student.fullname;
-                student.email = req.body.email || student.email;
-                student.faculty = req.body.faculty || student.faculty;
-                student.department = req.body.department || student.department;
-                student.level = req.body.level || student.level;
-                student.age = req.body.age || student.age;
-                student.profileImage = profileimage || student.profileImage;
-
-                student.save(function (err, student) {
-                    if (err) {
-                        res.status(500).send(err);
-                    } else {
-                        res.send("Student resource updated");
-                    }
-                });
-            } else {
-                student.fullname = req.body.fullname[0] || student.fullname;
-                student.email = req.body.email[0] || student.email;
-                student.faculty = req.body.faculty[0] || student.faculty;
-                student.department = req.body.department[0] || student.department;
-                student.level = req.body.level[0] || student.level;
-                student.age = req.body.age[0] || student.age;
-                student.profileImage = student.profileImage;
-
-                student.save(function (err, student) {
-                    if (err) {
-                        res.status(500).send(err);
-                    } else {
-                        res.send("Student resource updated");
-                    }
-                });
-            }
-
         }
+        if (req.file) {
+            profileimage = req.file.filename;
+            upload(req, res, function (err) {
+                if (err) {
+                    req.flash("An error occured while uploading");
+                }
+                console.log("Image uploaded");
+            });
+            oldProfileImage = student.profileImage;
+            fs.unlink(dirname + '/images/' + oldProfileImage);
+        }
+        student.fullname = fullname || student.fullname;
+        student.email = email || student.email;
+        student.faculty = faculty || student.faculty;
+        student.department = department || student.department;
+        student.level = level || student.level;
+        student.age = age || student.age;
+        student.profileImage = profileimage || student.profileImage;
+        student.save(function (err, student) {
+            if (err) {
+                res.status(500).send(err);
+            } else {
+                res.send("Student resource updated with image");
+            }
+        });
+
     });
 });
 
 router.get('/showStudent/:email/delete', function (req, res) {
+    var dir = __dirname;
+    var dirname = dir.replace('routes', 'public');
     var email = req.params.email;
+    var oldprofileImage;
     Student.getStudentByEmail(email, function (err, student) {
         if (err) throw err;
+        oldprofileImage = student.profileImage;
+        fs.unlink(dirname + '/images/' + oldprofileImage);
         student.remove();
         res.send('Student deleted');
     });

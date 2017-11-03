@@ -38,7 +38,7 @@
 <!--/ Navigation bar-->
 <br><br><br><br><br>
 <div class="container">
-    <form class="studentForm" action="/students/add" enctype="multipart/form-data" method="post">
+    <form class="studentForm" enctype="multipart/form-data" method="post">
         <div class="form-group">
             <label>Enter fullname</label>
             <input type="text" placeholder="Fullname" class="form-control" name="fullname" id="fullname" required>
@@ -76,6 +76,20 @@
         <input type="submit" class="btn btn-success" value="Update">
     </form>
 </div>
+<!--Footer-->
+<footer id="footer" class="footer">
+    <div class="container text-center">
+        <ul class="social-links">
+            <li><a href="#link"><i class="fa fa-twitter fa-fw"></i></a></li>
+            <li><a href="#link"><i class="fa fa-facebook fa-fw"></i></a></li>
+            <li><a href="#link"><i class="fa fa-google-plus fa-fw"></i></a></li>
+            <li><a href="https://github.com/Favouroked"><i class="fa fa-github fa-fw"></i></a></li>
+            <li><a href="#link"><i class="fa fa-linkedin fa-fw"></i></a></li>
+        </ul>
+        ©2017 Mentor Academy. All rights reserved
+    </div>
+</footer>
+<!--/ Footer-->
 <script src="/js/jquery.min.js"></script>
 <script src="/js/bootstrap.min.js"></script>
 <script src="/js/jquery.form.min.js"></script>
@@ -101,6 +115,7 @@
             var faculty = $('#faculty').val();
             var department = $('#department').val();
             var level = $('#level').val();
+            console.log(fullname);
             $(this).ajaxSubmit({
                 data: {
                     fullname: fullname,
@@ -110,6 +125,7 @@
                     department: department,
                     level: level
                 },
+                type: 'post',
                 url: '/students/showStudent/'+cookieValue+'/update',
                 contentType: 'application/json',
                 success: function (response) {

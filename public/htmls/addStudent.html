@@ -38,7 +38,7 @@
 <!--/ Navigation bar-->
 <br><br><br><br><br>
 <div class="container">
-    <form class="studentForm" action="/students/add" enctype="multipart/form-data" method="post">
+    <form class="addStudentForm" action="/students/add" enctype="multipart/form-data" method="post">
         <div class="form-group">
             <label>Enter fullname</label>
             <input type="text" placeholder="Fullname" class="form-control" name="fullname" id="fullname" required>
@@ -73,15 +73,29 @@
             <label>Upload Student Picture:</label>
             <input type="file" name="profileImage" required>
         </div>
-        <input type="submit" class="btn btn-success" value="Register">
+        <input type="submit" value="Add Student">
     </form>
 </div>
-<!--<script src="/js/jquery.min.js"></script>-->
-<!--<script src="/js/bootstrap.min.js"></script>-->
-<!--<script src="/js/jquery.form.min.js"></script>-->
+<!--Footer-->
+<footer id="footer" class="footer">
+    <div class="container text-center">
+        <ul class="social-links">
+            <li><a href="#link"><i class="fa fa-twitter fa-fw"></i></a></li>
+            <li><a href="#link"><i class="fa fa-facebook fa-fw"></i></a></li>
+            <li><a href="#link"><i class="fa fa-google-plus fa-fw"></i></a></li>
+            <li><a href="https://github.com/Favouroked"><i class="fa fa-github fa-fw"></i></a></li>
+            <li><a href="#link"><i class="fa fa-linkedin fa-fw"></i></a></li>
+        </ul>
+        ©2017 Mentor Academy. All rights reserved
+    </div>
+</footer>
+<!--/ Footer-->
+<script src="/js/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.form.min.js"></script>
 <script>
     $(document).ready(function() {
-        $('.studentForm').submit(function (e) {
+        $('.addStudentForm').submit(function (e) {
             e.preventDefault();
             var fullname = $('#fullname').val();
             var email = $('#email').val();
@@ -98,16 +112,14 @@
                     department: department,
                     level: level
                 },
+                type: 'post',
+                url: '/students/add',
                 contentType: 'application/json',
-                error: function(response) {
-                    alert('error');
-                },
                 success: function (response) {
                     alert(response);
                     window.location.href = '/htmls/allStudents.html';
                 }
             });
-            return false;
         });
     });
 </script>
