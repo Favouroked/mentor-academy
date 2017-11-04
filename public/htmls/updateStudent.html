@@ -13,6 +13,7 @@
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/css/imagehover.min.css">
     <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
 </head>
 
 <body>
@@ -90,11 +91,22 @@
     </div>
 </footer>
 <!--/ Footer-->
+<div class="favour-modal"></div>
 <script src="/js/jquery.min.js"></script>
 <script src="/js/bootstrap.min.js"></script>
 <script src="/js/jquery.form.min.js"></script>
 <script src="/js/jquery.cookie.js"></script>
 <script>
+    $body = $("body");
+
+    $(document).on({
+        ajaxStart: function () {
+            $body.addClass("loading");
+        },
+        ajaxStop: function () {
+            $body.removeClass("loading");
+        }
+    });
     $(document).ready(function() {
         var cookieValue = $.cookie('email');
         $.removeCookie('email');
