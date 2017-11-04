@@ -138,9 +138,6 @@ Banner
 	color: #fff;
 	margin-top: 30px;
 }
-.quote .btn{
-    background-color: 
-}
 .modal-dialog {
     width: 600px;
     margin: 150px auto;
@@ -194,21 +191,8 @@ Banner
     animation-duration: 2s;
     animation-iteration-count: infinite;
 }
-.modal-content h4 {
-    font-size: 1.5em;
-    font-weight: 700;
-}
-.login-box-body {
-    padding: 15px 30px;
-}
-.login-box-msg, .register-box-msg {
-    margin: 0px;
-    text-align: center;
-    padding: 0px 20px 20px;
-}
-.modal-sm {
-    width: 400px;
-}
+
+
 .padleft-right{
     padding-left: 5px;
     padding-right: 0px;
